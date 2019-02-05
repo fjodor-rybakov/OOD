@@ -1,28 +1,35 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, {Component, RefObject} from 'react';
+import {autobind} from "core-decorators";
+import {IShape} from "./IShape";
+import {Shape} from "./Shape";
 import './App.css';
+import {Triangle} from "./Triangle";
+import {Circle} from "./Circle";
 
+@autobind
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+    private textareaRef: RefObject<HTMLTextAreaElement> = React.createRef();
+
+    getData(): void {
+        // console.log(this.textareaRef.current!.value.split("\n"));
+
+        const data = this.textareaRef.current!.value.split("\n");
+
+        let shape = new Shape(data);
+        let triangle: IShape = new Triangle(shape);
+        let circle: IShape = new Circle(triangle);
+
+        console.log(circle.getData())
+    }
+    
+    render() {
+        return (
+            <div className="App">
+               <textarea ref={this.textareaRef}/>
+               <button onClick={this.getData}>click</button>
+            </div>
+        );
+    }
 }
 
 export default App;
