@@ -8,4 +8,8 @@ export class Shape implements IShape {
     getPerimeter(): number {
         return 0;
     }
+
+    getType(): string {
+        return "empty";
+    }
 }

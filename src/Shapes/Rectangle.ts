@@ -5,6 +5,7 @@ import {IRectangleSides} from "./interfaces/IRectangleSides";
 export class Rectangle implements IShape {
     private shape: IShape;
     private readonly rectangleData: IRectangleData;
+    private readonly _type = "RECTANGLE";
 
     constructor(shape: IShape, data: string) {
         this.shape = shape;
@@ -21,7 +22,11 @@ export class Rectangle implements IShape {
         return (sides.a + sides.b) * 2;
     }
 
-    parseData(data: string): IRectangleData {
+    getType() {
+        return this._type;
+    }
+
+    private parseData(data: string): IRectangleData {
         const partOfData: string[] = data.split(";");
         const pointsOne: string[] = partOfData[0].split("=")[1].split(",");
         const pointsTwo: string[] = partOfData[1].split("=")[1].split(",");
@@ -34,7 +39,7 @@ export class Rectangle implements IShape {
         }
     }
 
-    getSides(): IRectangleSides {
+    private getSides(): IRectangleSides {
         const points: IRectangleData = this.rectangleData;
         return {
             a: Math.abs(points.px2 - points.px1),

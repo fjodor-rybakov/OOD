@@ -4,7 +4,8 @@ import {ICircleData} from "./interfaces/ICircleData";
 export class Circle implements IShape {
     private shape: IShape;
     private circleData: ICircleData;
-    private pi: number = 3.14;
+    private readonly pi: number = 3.14;
+    private readonly _type = "Circle";
 
     constructor(shape: IShape, data: string) {
         this.shape = shape;
@@ -19,7 +20,11 @@ export class Circle implements IShape {
         return this.circleData.radius * 2 * this.pi;
     }
 
-    parseData(data: string): ICircleData {
+    getType() {
+        return this._type;
+    }
+
+    private parseData(data: string): ICircleData {
         const partOfData: string[] = data.split(";");
         const centerCoords: string[] = partOfData[0].split("=")[1].split(",");
         const radius: number = +partOfData[1].split("=")[1];

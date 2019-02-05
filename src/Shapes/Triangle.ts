@@ -5,6 +5,7 @@ import {ITriangleSides} from "./interfaces/ITriangleSides";
 export class Triangle implements IShape {
     private shape: IShape;
     private readonly triangleData: ITriangleData;
+    private readonly _type = "TRIANGLE";
 
     constructor(shape: IShape, data: string) {
         this.shape = shape;
@@ -22,7 +23,11 @@ export class Triangle implements IShape {
         return sides.a + sides.b + sides.c;
     }
 
-    parseData(data: string): ITriangleData {
+    getType() {
+        return this._type;
+    }
+
+    private parseData(data: string): ITriangleData {
         const partOfData: string[] = data.split(";");
         const pointsOne: string[] = partOfData[0].split("=")[1].split(",");
         const pointsTwo: string[] = partOfData[1].split("=")[1].split(",");
@@ -38,7 +43,7 @@ export class Triangle implements IShape {
         }
     }
 
-    getSides(): ITriangleSides {
+    private getSides(): ITriangleSides {
         const points: ITriangleData = this.triangleData;
         const a = Math.sqrt((Math.pow((points.px1 - points.px2), 2)) + (Math.pow((points.py1 - points.py2), 2)));
         const b = Math.sqrt((Math.pow((points.px2 - points.px3), 2)) + (Math.pow((points.py2 - points.py3), 2)));
