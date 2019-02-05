@@ -5,8 +5,8 @@ import {Circle} from "./Circle";
 
 export class ShapeController {
     private defaultData = [
-        "TRIANGLE: P1=100,100; P2=200,200; P3=150, 150",
-        "RECTANGLE: P1=200,200; P2=300,300",
+        "TRIANGLE: P1=100,100; P2=200,200; P3=200, 100",
+        "RECTANGLE: P1=40,40; P2=60,60",
         "CIRCLE: C=100,100; R=50"
     ];
 

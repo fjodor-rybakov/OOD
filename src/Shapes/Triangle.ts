@@ -1,6 +1,7 @@
 import {IShape} from "./interfaces/IShape";
 import {ITriangleData} from "./interfaces/ITriangleData";
 import {ITriangleSides} from "./interfaces/ITriangleSides";
+import * as React from "react";
 
 export class Triangle implements IShape {
     private shape: IShape;
@@ -21,6 +22,24 @@ export class Triangle implements IShape {
     getPerimeter(): number {
         const sides = this.getSides();
         return sides.a + sides.b + sides.c;
+    }
+
+    draw(canvasRef: React.RefObject<HTMLCanvasElement>): void {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        let context: CanvasRenderingContext2D | null = canvas.getContext("2d");
+        if (!context) return;
+        const points: ITriangleData = this.triangleData;
+
+        context.beginPath();
+        context.fillStyle = "red";
+        context.moveTo(0, 0);
+        context.lineTo(points.px2 - points.px1, points.py2 - points.py1);
+        context.lineTo(points.px3 - points.px1, points.py3 - points.py1);
+        context.closePath();
+        context.fill();
+        context.strokeStyle = "red";
+        context.stroke();
     }
 
     getType() {

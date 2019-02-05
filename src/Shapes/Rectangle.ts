@@ -1,6 +1,7 @@
 import {IShape} from "./interfaces/IShape";
 import {IRectangleData} from "./interfaces/IRectangleData";
 import {IRectangleSides} from "./interfaces/IRectangleSides";
+import * as React from "react";
 
 export class Rectangle implements IShape {
     private shape: IShape;
@@ -20,6 +21,18 @@ export class Rectangle implements IShape {
     getPerimeter(): number {
         const sides: IRectangleSides = this.getSides();
         return (sides.a + sides.b) * 2;
+    }
+
+    draw(canvasRef: React.RefObject<HTMLCanvasElement>): void {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        let context: CanvasRenderingContext2D | null = canvas.getContext("2d");
+        if (!context) return;
+        const posX = Math.max(this.rectangleData.px1, this.rectangleData.px2) - this.getSides().a;
+        const posY = Math.max(this.rectangleData.py1, this.rectangleData.py2) - this.getSides().b;
+
+        context.fillStyle = "green";
+        context.fillRect(posX, posY, this.getSides().a, this.getSides().b);
     }
 
     getType() {

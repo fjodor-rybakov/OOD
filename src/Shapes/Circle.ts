@@ -1,5 +1,6 @@
 import {IShape} from "./interfaces/IShape";
 import {ICircleData} from "./interfaces/ICircleData";
+import * as React from "react";
 
 export class Circle implements IShape {
     private shape: IShape;
@@ -18,6 +19,19 @@ export class Circle implements IShape {
 
     getPerimeter(): number {
         return this.circleData.radius * 2 * this.pi;
+    }
+
+    draw(canvasRef: React.RefObject<HTMLCanvasElement>): void {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        let context: CanvasRenderingContext2D | null = canvas.getContext("2d");
+        if (!context) return;
+
+        context.fillStyle = "orange";
+        context.beginPath();
+        context.arc(this.circleData.pointCenterX, this.circleData.pointCenterY, this.circleData.radius, 0, 2 * this.pi);
+        context.fill();
+        context.closePath();
     }
 
     getType() {

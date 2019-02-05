@@ -8,6 +8,7 @@ import './App.css';
 @autobind
 class App extends Component {
     private textareaRef: RefObject<HTMLTextAreaElement> = React.createRef();
+    private canvasRef: RefObject<HTMLCanvasElement> = React.createRef();
     private shapeController = new ShapeController();
 
     getData(): void {
@@ -21,17 +22,21 @@ class App extends Component {
         data.map((line: string) => {
             shape = this.shapeController.getShape(shape, line);
             if (shape != oldShape) {
+                shape.draw(this.canvasRef);
                 console.log(`${shape.getType()}: P=${shape.getPerimeter()}; S=${shape.getArea()}`);
             }
             oldShape = shape
         });
     }
-    
+
     render() {
         return (
             <div className="App">
-               <textarea ref={this.textareaRef}/>
-               <button onClick={this.getData}>click</button>
+                <textarea ref={this.textareaRef}/>
+                <button onClick={this.getData}>click</button>
+                <div>
+                    <canvas ref={this.canvasRef} className={"canvas"}/>
+                </div>
             </div>
         );
     }

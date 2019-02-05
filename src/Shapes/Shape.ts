@@ -12,4 +12,6 @@ export class Shape implements IShape {
     getType(): string {
         return "empty";
     }
+
+    draw(): void {}
 }
