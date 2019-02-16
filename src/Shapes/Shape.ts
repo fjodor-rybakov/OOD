@@ -1,17 +1,12 @@
 import {IShape} from "./interfaces/IShape";
+import * as React from "react";
 
-export class Shape implements IShape {
-    getArea(): number {
-        return 0;
-    }
+export abstract class Shape implements IShape {
+    abstract getArea(): number;
 
-    getPerimeter(): number {
-        return 0;
-    }
+    abstract getPerimeter(): number;
 
-    getType(): string {
-        return "empty";
-    }
+    abstract getType(): string;
 
-    draw(): void {}
+    abstract draw(canvasRef: React.RefObject<HTMLCanvasElement>): void;
 }

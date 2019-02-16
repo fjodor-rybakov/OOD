@@ -1,5 +1,5 @@
 export interface ICircleData {
-    pointCenterX: number;
-    pointCenterY: number;
+    pcx: number;
+    pcy: number;
     radius: number;
 }

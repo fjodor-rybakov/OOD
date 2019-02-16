@@ -1,4 +1,5 @@
 import {RefObject} from "react";
+import {IMouseCoords} from "./IMouseCoords";
 
 export interface IShape {
     draw(canvasRef: RefObject<HTMLCanvasElement>): void;

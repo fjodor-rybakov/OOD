@@ -1,15 +1,15 @@
-import {IShape} from "./interfaces/IShape";
 import {ICircleData} from "./interfaces/ICircleData";
 import * as React from "react";
+import {Shape} from "./Shape";
 
-export class Circle implements IShape {
-    private shape: IShape;
+export class Circle extends Shape {
     private circleData: ICircleData;
     private readonly pi: number = 3.14;
     private readonly _type = "Circle";
+    private context!: CanvasRenderingContext2D;
 
-    constructor(shape: IShape, data: string) {
-        this.shape = shape;
+    constructor(data: string) {
+        super();
         this.circleData = this.parseData(data);
     }
 
@@ -26,10 +26,11 @@ export class Circle implements IShape {
         if (!canvas) return;
         let context: CanvasRenderingContext2D | null = canvas.getContext("2d");
         if (!context) return;
+        this.context = context;
 
         context.fillStyle = "orange";
         context.beginPath();
-        context.arc(this.circleData.pointCenterX, this.circleData.pointCenterY, this.circleData.radius, 0, 2 * this.pi);
+        context.arc(this.circleData.pcx, this.circleData.pcy, this.circleData.radius, 0, 2 * this.pi);
         context.fill();
         context.closePath();
     }
@@ -44,8 +45,8 @@ export class Circle implements IShape {
         const radius: number = +partOfData[1].split("=")[1];
 
         return {
-            pointCenterX: +centerCoords[0],
-            pointCenterY: +centerCoords[1],
+            pcx: +centerCoords[0],
+            pcy: +centerCoords[1],
             radius
         }
     }

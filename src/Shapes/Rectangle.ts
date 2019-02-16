@@ -1,15 +1,14 @@
-import {IShape} from "./interfaces/IShape";
 import {IRectangleData} from "./interfaces/IRectangleData";
 import {IRectangleSides} from "./interfaces/IRectangleSides";
 import * as React from "react";
+import {Shape} from "./Shape";
 
-export class Rectangle implements IShape {
-    private shape: IShape;
+export class Rectangle extends Shape {
     private readonly rectangleData: IRectangleData;
     private readonly _type = "RECTANGLE";
 
-    constructor(shape: IShape, data: string) {
-        this.shape = shape;
+    constructor(data: string) {
+        super();
         this.rectangleData  = this.parseData(data);
     }
 

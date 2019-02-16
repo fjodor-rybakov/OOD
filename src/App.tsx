@@ -1,9 +1,9 @@
 import React, {Component, RefObject} from 'react';
 import {autobind} from "core-decorators";
 import {IShape} from "./Shapes/interfaces/IShape";
-import {Shape} from "./Shapes/Shape";
 import {ShapeController} from "./Shapes/ShapeController";
 import './App.css';
+import {DragCommand} from "./Shapes/DragCommand";
 
 @autobind
 class App extends Component {
@@ -16,16 +16,14 @@ class App extends Component {
         if (data[0] == "") {
             data = this.shapeController.getDefaultData();
         }
-        let shape: IShape = new Shape();
-        let oldShape: IShape;
+        let shape: IShape;
 
         data.map((line: string) => {
             shape = this.shapeController.getShape(shape, line);
-            if (shape != oldShape) {
-                shape.draw(this.canvasRef);
-                console.log(`${shape.getType()}: P=${shape.getPerimeter()}; S=${shape.getArea()}`);
-            }
-            oldShape = shape
+            const dragCommand = new DragCommand(shape, this.canvasRef);
+            dragCommand.execute();
+            shape.draw(this.canvasRef);
+            console.log(`${shape.getType()}: P=${shape.getPerimeter()}; S=${shape.getArea()}`);
         });
     }
 

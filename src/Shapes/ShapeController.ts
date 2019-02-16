@@ -20,17 +20,17 @@ export class ShapeController {
 
         switch (type) {
             case "TRIANGLE": {
-                shape = new Triangle(shape, partOfData[1]);
+                shape = new Triangle(partOfData[1]);
                 break;
             }
 
             case "RECTANGLE": {
-                shape = new Rectangle(shape, partOfData[1]);
+                shape = new Rectangle(partOfData[1]);
                 break;
             }
 
             case "CIRCLE": {
-                shape = new Circle(shape, partOfData[1]);
+                shape = new Circle(partOfData[1]);
                 break;
             }
         }
