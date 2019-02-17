@@ -1,5 +1,5 @@
 import {IShape} from "./interfaces/IShape";
-import * as React from "react";
+import {fabric} from "fabric";
 
 export abstract class Shape implements IShape {
     abstract getArea(): number;
@@ -8,5 +8,5 @@ export abstract class Shape implements IShape {
 
     abstract getType(): string;
 
-    abstract draw(canvasRef: React.RefObject<HTMLCanvasElement>): void;
+    abstract draw(canvas:  fabric.Canvas): void;
 }

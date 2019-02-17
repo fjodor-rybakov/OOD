@@ -1,7 +1,7 @@
 import {IRectangleData} from "./interfaces/IRectangleData";
 import {IRectangleSides} from "./interfaces/IRectangleSides";
-import * as React from "react";
 import {Shape} from "./Shape";
+import {fabric} from "fabric";
 
 export class Rectangle extends Shape {
     private readonly rectangleData: IRectangleData;
@@ -22,16 +22,19 @@ export class Rectangle extends Shape {
         return (sides.a + sides.b) * 2;
     }
 
-    draw(canvasRef: React.RefObject<HTMLCanvasElement>): void {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        let context: CanvasRenderingContext2D | null = canvas.getContext("2d");
-        if (!context) return;
-        const posX = Math.max(this.rectangleData.px1, this.rectangleData.px2) - this.getSides().a;
-        const posY = Math.max(this.rectangleData.py1, this.rectangleData.py2) - this.getSides().b;
+    draw(canvas:  fabric.Canvas): void {
+        const sides: IRectangleSides = this.getSides();
+        const points: IRectangleData = this.rectangleData;
 
-        context.fillStyle = "green";
-        context.fillRect(posX, posY, this.getSides().a, this.getSides().b);
+        const options = {
+            width: sides.a,
+            height: sides.b,
+            fill: "green",
+            left: (points.px1 + points.px2) / 2,
+            top: (points.py1 + points.py2) / 2,
+        };
+
+        canvas.add(new fabric.Rect(options));
     }
 
     getType() {

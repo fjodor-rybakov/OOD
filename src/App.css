@@ -31,7 +31,15 @@
     }
 }
 
-.canvas {
-    width: 400px;
+.canvas_field {
+    display: inline-block;
+}
+
+#canvas {
+    border: 1px solid black;
+}
+
+.area {
+    width: 350px;
     height: 200px;
 }

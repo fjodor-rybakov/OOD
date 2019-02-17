@@ -3,12 +3,11 @@ import {autobind} from "core-decorators";
 import {IShape} from "./Shapes/interfaces/IShape";
 import {ShapeController} from "./Shapes/ShapeController";
 import './App.css';
-import {DragCommand} from "./Shapes/DragCommand";
+import {fabric} from "fabric";
 
 @autobind
 class App extends Component {
     private textareaRef: RefObject<HTMLTextAreaElement> = React.createRef();
-    private canvasRef: RefObject<HTMLCanvasElement> = React.createRef();
     private shapeController = new ShapeController();
 
     getData(): void {
@@ -17,12 +16,11 @@ class App extends Component {
             data = this.shapeController.getDefaultData();
         }
         let shape: IShape;
+        let canvas: fabric.Canvas = new fabric.Canvas("canvas");
 
         data.map((line: string) => {
             shape = this.shapeController.getShape(shape, line);
-            const dragCommand = new DragCommand(shape, this.canvasRef);
-            dragCommand.execute();
-            shape.draw(this.canvasRef);
+            shape.draw(canvas);
             console.log(`${shape.getType()}: P=${shape.getPerimeter()}; S=${shape.getArea()}`);
         });
     }
@@ -30,10 +28,12 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                <textarea ref={this.textareaRef}/>
-                <button onClick={this.getData}>click</button>
                 <div>
-                    <canvas ref={this.canvasRef} className={"canvas"}/>
+                    <textarea ref={this.textareaRef} className={"area"}/>
+                    <button onClick={this.getData} type={"button"} id={"button_show"} className={"btn btn-primary"}>SHOW</button>
+                </div>
+                <div className={"canvas_field"}>
+                    <canvas width={"600"} height={"600"} id={"canvas"}/>
                 </div>
             </div>
         );

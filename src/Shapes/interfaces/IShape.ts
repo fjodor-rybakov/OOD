@@ -1,8 +1,7 @@
-import {RefObject} from "react";
-import {IMouseCoords} from "./IMouseCoords";
+import {fabric} from "fabric";
 
 export interface IShape {
-    draw(canvasRef: RefObject<HTMLCanvasElement>): void;
+    draw(canvas:  fabric.Canvas): void;
     getArea(): number;
     getPerimeter(): number;
     getType(): string;
