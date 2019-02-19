@@ -1,13 +1,11 @@
 import {ICircleData} from "./interfaces/ICircleData";
-import * as React from "react";
 import {Shape} from "./Shape";
 import {fabric} from "fabric";
 
 export class Circle extends Shape {
     private circleData: ICircleData;
     private readonly pi: number = 3.14;
-    private readonly _type = "Circle";
-    private context!: CanvasRenderingContext2D;
+    private readonly _type = "CIRCLE";
 
     constructor(data: string) {
         super();

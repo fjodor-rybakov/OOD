@@ -2,6 +2,7 @@ import {IShape} from "./interfaces/IShape";
 import {Triangle} from "./Triangle";
 import {Rectangle} from "./Rectangle";
 import {Circle} from "./Circle";
+import {CompoundShape} from "./CompoundShape";
 
 export class ShapeController {
     private defaultData = [
@@ -14,27 +15,26 @@ export class ShapeController {
         return this.defaultData;
     }
 
-    getShape(shape: IShape, line: string): IShape {
+    getShape(line: string): IShape {
         const partOfData: string[] = line.split(":");
         let type: string = partOfData[0];
 
         switch (type) {
             case "TRIANGLE": {
-                shape = new Triangle(partOfData[1]);
-                break;
+                return new Triangle(partOfData[1]);
             }
 
             case "RECTANGLE": {
-                shape = new Rectangle(partOfData[1]);
-                break;
+                return new Rectangle(partOfData[1]);
             }
 
             case "CIRCLE": {
-                shape = new Circle(partOfData[1]);
-                break;
+                return new Circle(partOfData[1]);
+            }
+
+            default: {
+                return new CompoundShape([]);
             }
         }
-
-        return shape;
     }
 }
