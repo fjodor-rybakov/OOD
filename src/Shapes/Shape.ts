@@ -1,5 +1,4 @@
 import {IShape} from "./interfaces/IShape";
-import {fabric} from "fabric";
 
 export abstract class Shape implements IShape {
     abstract getArea(): number;
@@ -8,5 +7,5 @@ export abstract class Shape implements IShape {
 
     abstract getType(): string;
 
-    abstract draw(canvas:  fabric.Canvas): void;
+    abstract draw(canvas: HTMLCanvasElement): void;
 }

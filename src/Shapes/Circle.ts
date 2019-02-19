@@ -1,6 +1,5 @@
 import {ICircleData} from "./interfaces/ICircleData";
 import {Shape} from "./Shape";
-import {fabric} from "fabric";
 
 export class Circle extends Shape {
     private circleData: ICircleData;
@@ -20,15 +19,15 @@ export class Circle extends Shape {
         return this.circleData.radius * 2 * this.pi;
     }
 
-    draw(canvas:  fabric.Canvas): void {
-        const options = {
-            top: this.circleData.pcy,
-            left: this.circleData.pcx,
-            radius: this.circleData.radius,
-            fill: "orange"
-        };
+    draw(canvas: HTMLCanvasElement): void {
+        let context: CanvasRenderingContext2D | null = canvas.getContext("2d");
+        if (!context) return;
 
-        canvas.add(new fabric.Circle(options))
+        context.fillStyle = "orange";
+        context.beginPath();
+        context.arc(this.circleData.pcx, this.circleData.pcy, this.circleData.radius, 0, 2 * this.pi);
+        context.fill();
+        context.closePath();
     }
 
     getType() {

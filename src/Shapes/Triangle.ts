@@ -1,8 +1,6 @@
 import {ITriangleData} from "./interfaces/ITriangleData";
 import {ITriangleSides} from "./interfaces/ITriangleSides";
-import * as React from "react";
 import {Shape} from "./Shape";
-import {fabric} from "fabric";
 
 export class Triangle extends Shape {
     private readonly triangleData: ITriangleData;
@@ -24,21 +22,20 @@ export class Triangle extends Shape {
         return sides.a + sides.b + sides.c;
     }
 
-    draw(canvas: fabric.Canvas): void {
+    draw(canvas: HTMLCanvasElement): void {
+        let context: CanvasRenderingContext2D | null = canvas.getContext("2d");
+        if (!context) return;
         const points: ITriangleData = this.triangleData;
-        const sides = this.getSides();
-        const p = (sides.a + sides.b + sides.c) / 2;
-        const h = (2 * Math.sqrt(p * (p - sides.a) * (p - sides.b) * (p - sides.c))) / sides.a;
 
-        const options = {
-            width: sides.b,
-            height: h,
-            fill: "red",
-            left: (points.py1 + points.py2 + points.py3) / 3,
-            right: (points.px1 + points.px2 + points.px3) / 3,
-        };
-
-        canvas.add(new fabric.Triangle(options));
+        context.beginPath();
+        context.fillStyle = "red";
+        context.moveTo(0, 0);
+        context.lineTo(points.px2 - points.px1, points.py2 - points.py1);
+        context.lineTo(points.px3 - points.px1, points.py3 - points.py1);
+        context.closePath();
+        context.fill();
+        context.strokeStyle = "red";
+        context.stroke();
     }
 
     getType() {

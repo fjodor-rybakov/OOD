@@ -3,7 +3,7 @@ import {IShape} from "./interfaces/IShape";
 import * as React from "react";
 
 export class DragCommand extends Command {
-    constructor(subject: IShape, canvas: React.RefObject<HTMLCanvasElement>) {
+    constructor(subject: IShape, canvas: HTMLCanvasElement) {
         super(subject, canvas);
     }
 

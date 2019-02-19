@@ -1,6 +1,5 @@
 import {Shape} from "./Shape";
 import {IShape} from "./interfaces/IShape";
-import {Canvas} from "fabric/fabric-impl";
 
 export class CompoundShape extends Shape {
     private children: Shape[] = [];
@@ -15,7 +14,7 @@ export class CompoundShape extends Shape {
         return this.children;
     }
 
-    draw(canvas: Canvas) {
+    draw(canvas: HTMLCanvasElement) {
         this.children.map((item: IShape) => {
             item.draw(canvas);
         });
