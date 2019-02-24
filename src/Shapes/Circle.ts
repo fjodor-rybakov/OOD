@@ -2,6 +2,7 @@ import {ICircleData} from "./interfaces/ICircleData";
 import {Shape} from "./Shape";
 import {Triangle} from "./Triangle";
 import {Rectangle} from "./Rectangle";
+import {IShape} from "./interfaces/IShape";
 
 export class Circle extends Shape {
     private readonly circleData: ICircleData;
@@ -49,7 +50,7 @@ export class Circle extends Shape {
         return this._type;
     }
 
-    selected(x: number, y: number): Rectangle | Circle | Triangle | null {
+    selected(x: number, y: number): IShape | null {
         const {pcx, pcy, radius} = this.circleData;
         if (Math.sqrt((x-pcx)*(x-pcx)+(y-pcy)*(y-pcy)) <= radius) {
             return this;
@@ -58,10 +59,9 @@ export class Circle extends Shape {
         }
     }
 
-    setNewPosition(pcx: number, pcy: number, radius?: number): void {
+    setNewPosition(pcx: number, pcy: number): void {
         this.circleData.pcx = pcx;
         this.circleData.pcy = pcy;
-        if (radius) this.circleData.radius = radius;
     }
 
     private parseData(data: string): ICircleData {

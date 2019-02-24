@@ -3,6 +3,7 @@ import {ITriangleSides} from "./interfaces/ITriangleSides";
 import {Shape} from "./Shape";
 import {Rectangle} from "./Rectangle";
 import {Circle} from "./Circle";
+import {IShape} from "./interfaces/IShape";
 
 export class Triangle extends Shape {
     private triangleData: ITriangleData;
@@ -55,7 +56,7 @@ export class Triangle extends Shape {
         this._isSelected = value;
     }
 
-    selected(x: number, y: number): Rectangle | Circle | Triangle | null {
+    selected(x: number, y: number): IShape | null {
         const {px1, px2, px3, py1, py2, py3} = this.triangleData;
         let a = (px1 - x) * (py2 - py1) - (px2 - px1) * (py1 - y);
         let b = (px2 - x) * (py3 - py2) - (px3 - px2) * (py2 - y);

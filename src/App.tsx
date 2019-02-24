@@ -1,9 +1,9 @@
-import React, {Component, RefObject} from "react";
+import React, {Component, RefObject} from 'react';
 import {autobind} from "core-decorators";
 import {IShape} from "./Shapes/interfaces/IShape";
 import {ShapeController} from "./Shapes/ShapeController";
 import {CompoundShape} from "./Shapes/CompoundShape";
-import "./App.css";
+import './App.css';
 
 @autobind
 class App extends Component {
@@ -21,48 +21,55 @@ class App extends Component {
             return;
         }
 
+        canvas.oncontextmenu = (e) => e.preventDefault();
+
         const shapes: IShape[] = data.map((line: string) =>  this.shapeController.getShape(line));
         const compound = new CompoundShape(shapes);
         compound.draw(canvas);
         console.log(`${compound.getType()}: P=${compound.getPerimeter()}; S=${compound.getArea()}`);
 
         const elemLeft = canvas.offsetLeft, elemTop = canvas.offsetTop;
-        let isSelect = false;
+        let isDrag = false;
         canvas.onmousedown = (event) => {
             let xd = event.pageX - elemLeft, yd = event.pageY - elemTop;
+            let countSelectedShapes = 0;
 
             compound.getChildren().map((item: IShape) => {
                 if (item.selected(xd, yd)) {
-                    isSelect = true;
-                    canvas.oncontextmenu = (e) => {
+                    isDrag = true;
+                    if (event.button === 2) {
                         item.isSelected = !item.isSelected;
-                        e.preventDefault();
                         canvas.getContext("2d")!.clearRect(0, 0, canvas.width, canvas.height);
                         compound.draw(canvas);
-                    };
-
-                    console.log(item);
+                    }
 
                     canvas.onmousemove = (event) => {
-                        if (isSelect) {
+                        if (isDrag) {
                             let x = event.pageX - elemLeft, y = event.pageY - elemTop;
-                            canvas.oncontextmenu = (e) => {
-                                item.isSelected = !item.isSelected;
-                                e.preventDefault();
-                            };
                             item.setNewPosition(x, y);
                             canvas.getContext("2d")!.clearRect(0, 0, canvas.width, canvas.height);
                             compound.draw(canvas);
                         }
-                        event.preventDefault();
-                        event.stopPropagation();
                     };
 
                     canvas.onmouseup = () => {
-                        isSelect = false;
+                        isDrag = false;
                     }
                 }
+
+                if (item.isSelected) {
+                    ++countSelectedShapes;
+                }
             });
+
+            console.log(countSelectedShapes);
+            if (countSelectedShapes >= 2) {
+                canvas.getContext("2d")!.clearRect(0, 0, canvas.width, canvas.height);
+                const children = compound.getChildren();
+                const newCompound = new CompoundShape(children);
+
+                newCompound.draw(canvas);
+            }
         };
         compound.getChildren().map((item: IShape) => {
             console.log(`${item.getType()}: P=${item.getPerimeter()}; S=${item.getArea()}`);

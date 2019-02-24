@@ -44,7 +44,7 @@ export class CompoundShape extends Shape {
         return this._type;
     }
 
-    selected(x: number, y: number): Rectangle | Circle | Triangle | null {
+    selected(x: number, y: number): IShape | null {
         return null;
     }
 

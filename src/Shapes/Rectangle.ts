@@ -3,6 +3,7 @@ import {IRectangleSides} from "./interfaces/IRectangleSides";
 import {Shape} from "./Shape";
 import {Circle} from "./Circle";
 import {Triangle} from "./Triangle";
+import {IShape} from "./interfaces/IShape";
 
 export class Rectangle extends Shape {
     private rectangleData: IRectangleData;
@@ -49,7 +50,7 @@ export class Rectangle extends Shape {
         this._isSelected = value;
     }
 
-    selected(x: number, y: number): Rectangle | Circle | Triangle | null {
+    selected(x: number, y: number): IShape | null {
         const {px1, px2, py1, py2} = this.rectangleData;
         if (((x >=px1) && (y<=py1)) && ((x<=px2) && (y>=py2))) {
             return this;
