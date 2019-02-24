@@ -1,10 +1,13 @@
 import {IRectangleData} from "./interfaces/IRectangleData";
 import {IRectangleSides} from "./interfaces/IRectangleSides";
 import {Shape} from "./Shape";
+import {Circle} from "./Circle";
+import {Triangle} from "./Triangle";
 
 export class Rectangle extends Shape {
-    private readonly rectangleData: IRectangleData;
+    private rectangleData: IRectangleData;
     private readonly _type = "RECTANGLE";
+    private _isSelected = false;
 
     constructor(data: string) {
         super();
@@ -29,14 +32,44 @@ export class Rectangle extends Shape {
 
         context.fillStyle = "green";
         context.fillRect(posX, posY, this.getSides().a, this.getSides().b);
-    }
-
-    drag() {
-
+        if (this.isSelected) {
+            context.strokeRect(posX - 10, posY - 10, this.getSides().a + 20, this.getSides().b + 20);
+        }
     }
 
     getType() {
         return this._type;
+    }
+
+    get isSelected(): boolean {
+        return this._isSelected;
+    }
+
+    set isSelected(value: boolean) {
+        this._isSelected = value;
+    }
+
+    selected(x: number, y: number): Rectangle | Circle | Triangle | null {
+        const {px1, px2, py1, py2} = this.rectangleData;
+        if (((x >=px1) && (y<=py1)) && ((x<=px2) && (y>=py2))) {
+            return this;
+        } else {
+            return null;
+        }
+    }
+
+    setNewPosition(x: number, y: number): void {
+        const {px1, px2, py1, py2} = this.rectangleData;
+        const cx = px1 + (px2 - px1) / 2;
+        const cy = py2 + (py1 - py2) / 2;
+        const ccx = cx - x;
+        const ccy = cy - y;
+        this.rectangleData = {
+            px1: px1 - ccx,
+            px2: px2 - ccx,
+            py1: py1 - ccy,
+            py2: py2 - ccy
+        }
     }
 
     private parseData(data: string): IRectangleData {

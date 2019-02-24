@@ -8,4 +8,12 @@ export abstract class Shape implements IShape {
     abstract getType(): string;
 
     abstract draw(canvas: HTMLCanvasElement): void;
+
+    abstract selected(x: number, y: number): IShape | null;
+
+    abstract setNewPosition(x: number, y: number): void;
+
+    abstract get isSelected(): boolean;
+
+    abstract set isSelected(value: boolean);
 }

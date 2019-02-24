@@ -1,9 +1,13 @@
 import {Shape} from "./Shape";
 import {IShape} from "./interfaces/IShape";
+import {Rectangle} from "./Rectangle";
+import {Triangle} from "./Triangle";
+import {Circle} from "./Circle";
 
 export class CompoundShape extends Shape {
     private children: Shape[] = [];
     private readonly _type = "COMPOUND";
+    private _isSelected = false;
 
     constructor(shapes: Shape[]) {
         super();
@@ -38,5 +42,21 @@ export class CompoundShape extends Shape {
 
     getType(): string {
         return this._type;
+    }
+
+    selected(x: number, y: number): Rectangle | Circle | Triangle | null {
+        return null;
+    }
+
+    setNewPosition(x: number, y: number): void {
+
+    }
+
+    get isSelected(): boolean {
+        return this._isSelected;
+    }
+
+    set isSelected(value: boolean) {
+        this._isSelected = value;
     }
 }

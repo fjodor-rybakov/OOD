@@ -6,9 +6,9 @@ import {CompoundShape} from "./CompoundShape";
 
 export class ShapeController {
     private defaultData = [
-        "TRIANGLE: P1=100,100; P2=200,200; P3=200, 100",
-        "RECTANGLE: P1=40,40; P2=60,60",
-        "CIRCLE: C=100,100; R=50"
+        "TRIANGLE: P1=100,100; P2=100,220; P3=220, 220",
+        "RECTANGLE: P1=440,440; P2=560,320",
+        "CIRCLE: C=300,270; R=50"
     ];
 
     getDefaultData(): string[] {
