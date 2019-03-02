@@ -5,7 +5,9 @@ import {Circle} from "./Circle";
 import {CompoundShape} from "./CompoundShape";
 import {EShapeType} from "./interfaces/EShapeType";
 import * as _ from "lodash";
+import {autobind} from "core-decorators";
 
+@autobind
 export class ShapeController {
     private defaultData = [
         "TRIANGLE: P1=100,100; P2=100,220; P3=220, 220",
@@ -41,6 +43,12 @@ export class ShapeController {
         }
     }
 
+    selectShape(canvas: HTMLCanvasElement, item: IShape, compound: IShape) {
+        item.isSelected = !item.isSelected;
+        canvas.getContext("2d")!.clearRect(0, 0, canvas.width, canvas.height);
+        compound.draw(canvas);
+    }
+
     onDrag(canvas: HTMLCanvasElement, compound: CompoundShape, event: MouseEvent) {
         const elemLeft = canvas.offsetLeft, elemTop = canvas.offsetTop;
         let isDrag = false;
@@ -72,12 +80,6 @@ export class ShapeController {
                 };
             }
         });
-    }
-
-    private selectShape(canvas: HTMLCanvasElement, item: IShape, compound: IShape) {
-        item.isSelected = !item.isSelected;
-        canvas.getContext("2d")!.clearRect(0, 0, canvas.width, canvas.height);
-        compound.draw(canvas);
     }
 
     groupShape(canvas: HTMLCanvasElement, compound: CompoundShape, event: KeyboardEvent): void {
