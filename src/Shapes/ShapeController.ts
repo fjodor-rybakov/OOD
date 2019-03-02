@@ -3,6 +3,7 @@ import {Triangle} from "./Triangle";
 import {Rectangle} from "./Rectangle";
 import {Circle} from "./Circle";
 import {CompoundShape} from "./CompoundShape";
+import {EShapeType} from "./interfaces/EShapeType";
 
 export class ShapeController {
     private defaultData = [
@@ -20,15 +21,15 @@ export class ShapeController {
         let type: string = partOfData[0];
 
         switch (type) {
-            case "TRIANGLE": {
+            case EShapeType.TRIANGLE: {
                 return new Triangle(partOfData[1]);
             }
 
-            case "RECTANGLE": {
+            case EShapeType.RECTANGLE: {
                 return new Rectangle(partOfData[1]);
             }
 
-            case "CIRCLE": {
+            case EShapeType.CIRCLE: {
                 return new Circle(partOfData[1]);
             }
 

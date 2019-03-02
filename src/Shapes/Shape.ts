@@ -10,7 +10,7 @@ export abstract class Shape implements IShape {
 
     abstract draw(canvas: HTMLCanvasElement): void;
 
-    abstract selected(x: number, y: number): IShape | null;
+    abstract onShape(x: number, y: number): IShape | null;
 
     abstract setNewPosition(x: number, y: number, sx: number, sy: number): void;
 

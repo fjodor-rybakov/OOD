@@ -3,20 +3,26 @@ import {IShape} from "./interfaces/IShape";
 import {ISideCoords} from "./interfaces/ISideCoords";
 import {IRectangleData} from "./interfaces/IRectangleData";
 import {IRectangleSides} from "./interfaces/IRectangleSides";
+import {EShapeType} from "./interfaces/EShapeType";
 
 export class CompoundShape extends Shape {
-    private compoundData!: IRectangleData;
+    private compoundData: IRectangleData;
     private children: Shape[] = [];
-    private readonly _type = "COMPOUND";
+    private readonly _type = EShapeType.COMPOUND;
     private _isSelected = false;
 
     constructor(shapes: Shape[]) {
         super();
+        this.compoundData = this.setCompoundData(shapes);
         this.children.push(...shapes);
     }
 
     getChildren(): Shape[] {
         return this.children;
+    }
+
+    addChild(shape: Shape): void {
+        this.children.push(shape);
     }
 
     setChildren(shapes: Shape[]): void {
@@ -56,30 +62,9 @@ export class CompoundShape extends Shape {
         return this._type;
     }
 
-    selected(x: number, y: number): IShape | null {
-        let minX1 = 99999999;
-        let minY1 = 99999999;
-        let maxX2 = -99999999;
-        let maxY2 = -99999999;
-        let position;
-        this.getChildren().map((item: IShape) => {
-            position = item.getPosition();
-            if (position.x1 < minX1)
-                minX1 = position.x1;
-            if (position.y1 < minY1)
-                minY1 = position.y1;
-            if (position.x2 > maxX2)
-                maxX2 = position.x2;
-            if (position.y2 > maxY2)
-                maxY2 = position.y2;
-        });
-        this.compoundData = {
-            px1: minX1,
-            py2: maxY2,
-            px2: maxX2,
-            py1: minY1
-        };
-        if (((x >= minX1) && (y <= maxY2)) && ((x <= maxX2) && (y >= minY1))) {
+    onShape(x: number, y: number): IShape | null {
+        const {px1, py2, px2, py1} = this.compoundData;
+        if (((x >= px1) && (y <= py2)) && ((x <= px2) && (y >= py1))) {
             return this;
         } else {
             return null;
@@ -127,5 +112,30 @@ export class CompoundShape extends Shape {
             a: Math.abs(points.px2 - points.px1),
             b: Math.abs(points.py2 - points.py1)
         }
+    }
+
+    private setCompoundData(shapes: IShape[]): IRectangleData {
+        let minX1 = 99999999;
+        let minY1 = 99999999;
+        let maxX2 = -99999999;
+        let maxY2 = -99999999;
+        let position;
+        shapes.map((item: IShape) => {
+            position = item.getPosition();
+            if (position.x1 < minX1)
+                minX1 = position.x1;
+            if (position.y1 < minY1)
+                minY1 = position.y1;
+            if (position.x2 > maxX2)
+                maxX2 = position.x2;
+            if (position.y2 > maxY2)
+                maxY2 = position.y2;
+        });
+        return {
+            px1: minX1,
+            py2: maxY2,
+            px2: maxX2,
+            py1: minY1
+        };
     }
 }

@@ -1,14 +1,13 @@
 import {IRectangleData} from "./interfaces/IRectangleData";
 import {IRectangleSides} from "./interfaces/IRectangleSides";
 import {Shape} from "./Shape";
-import {Circle} from "./Circle";
-import {Triangle} from "./Triangle";
 import {IShape} from "./interfaces/IShape";
 import {ISideCoords} from "./interfaces/ISideCoords";
+import {EShapeType} from "./interfaces/EShapeType";
 
 export class Rectangle extends Shape {
     private rectangleData: IRectangleData;
-    private readonly _type = "RECTANGLE";
+    private readonly _type = EShapeType.RECTANGLE;
     private _isSelected = false;
 
     constructor(data: string) {
@@ -17,6 +16,7 @@ export class Rectangle extends Shape {
     }
 
     getArea(): number {
+        console.log(this.getSides())
         const sides: IRectangleSides = this.getSides();
         return sides.a * sides.b;
     }
@@ -51,7 +51,7 @@ export class Rectangle extends Shape {
         this._isSelected = value;
     }
 
-    selected(x: number, y: number): IShape | null {
+    onShape(x: number, y: number): IShape | null {
         const {px1, px2, py1, py2} = this.rectangleData;
         if (((x >=px1) && (y<=py1)) && ((x<=px2) && (y>=py2))) {
             return this;

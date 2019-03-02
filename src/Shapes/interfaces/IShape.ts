@@ -9,7 +9,7 @@ export interface IShape {
 
     getType(): string;
 
-    selected(x: number, y: number): IShape | null;
+    onShape(x: number, y: number): IShape | null;
 
     setNewPosition(x: number, y: number, sx: number, sy: number): void;
 

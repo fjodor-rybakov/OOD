@@ -5,6 +5,7 @@ import {ShapeController} from "./Shapes/ShapeController";
 import {CompoundShape} from "./Shapes/CompoundShape";
 import * as _ from "lodash";
 import './App.css';
+import {EShapeType} from "./Shapes/interfaces/EShapeType";
 
 @autobind
 class App extends Component {
@@ -40,10 +41,12 @@ class App extends Component {
             selectedShapes = [];
 
             compound.getChildren().map((item: IShape) => {
-                if (item.selected(xd, yd)) {
+                if (item.onShape(xd, yd)) {
                     isDrag = true;
 
-                    this.selectShape(canvas, typeDown, item, compound);
+                    if (typeDown === 2) {
+                        this.selectShape(canvas, item, compound);
+                    }
                     canvas.onmousemove = (event: MouseEvent) => {
                         if (isDrag) {
                             let x = event.pageX - elemLeft, y = event.pageY - elemTop;
@@ -57,7 +60,7 @@ class App extends Component {
 
                     canvas.onmouseup = () => {
                         isDrag = false;
-                    }
+                    };
                 }
 
                 if (item.isSelected) {
@@ -73,28 +76,57 @@ class App extends Component {
             }
         };
         addEventListener("keydown", (event: KeyboardEvent) => {
-            if (event.ctrlKey) {
-                canvas.getContext("2d")!.clearRect(0, 0, canvas.width, canvas.height);
-                const newShapes = compound.getChildren().filter((item: IShape) => {
-                    return !_.includes(selectedShapes, item);
-                });
-                const newCompound = new CompoundShape(selectedShapes);
-                newShapes.push(newCompound);
-                compound.setChildren(newShapes);
-                console.log(compound.getChildren());
-                compound.draw(canvas);
-            }
+            this.groupShape(event, canvas, compound);
         });
+        addEventListener("keydown", (event: KeyboardEvent) => {
+            this.ungroupShape(event, canvas, compound, selectedShapes);
+        });
+
         compound.getChildren().map((item: IShape) => {
             console.log(`${item.getType()}: P=${item.getPerimeter()}; S=${item.getArea()}`);
         });
     }
 
-    private selectShape(canvas: HTMLCanvasElement, typeDown: number, item: IShape, compound: IShape) {
-        if (typeDown === 2) {
-            item.isSelected = !item.isSelected;
+    private selectShape(canvas: HTMLCanvasElement, item: IShape, compound: IShape) {
+        item.isSelected = !item.isSelected;
+        canvas.getContext("2d")!.clearRect(0, 0, canvas.width, canvas.height);
+        compound.draw(canvas);
+    }
+
+    private groupShape(event: KeyboardEvent, canvas: HTMLCanvasElement, compound: CompoundShape): void {
+        if (event.key === "u") {
+            compound.getChildren().map((item) => {
+                if (item.getType() === EShapeType.COMPOUND && item.isSelected) {
+                    canvas.getContext("2d")!.clearRect(0, 0, canvas.width, canvas.height);
+                    const comp = item as CompoundShape;
+                    item.isSelected = false;
+                    comp.getChildren().map((item) => {
+                        compound.addChild(item);
+                    });
+
+                    _.remove(compound.getChildren(), comp);
+                    compound.draw(canvas);
+
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            });
+        }
+    }
+
+    private ungroupShape(event: KeyboardEvent, canvas: HTMLCanvasElement, compound: CompoundShape, selectedShapes: IShape[]): void {
+        if (event.key === "g" && selectedShapes.length !== 0) {
             canvas.getContext("2d")!.clearRect(0, 0, canvas.width, canvas.height);
+            const newShapes = compound.getChildren().filter((item: IShape) => {
+                return !_.includes(selectedShapes, item);
+            });
+            const newCompound = new CompoundShape(selectedShapes);
+            newShapes.push(newCompound);
+            compound.setChildren(newShapes);
+            newCompound.isSelected = true;
             compound.draw(canvas);
+            event.preventDefault();
+            event.stopPropagation();
         }
     }
 

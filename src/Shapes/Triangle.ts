@@ -1,14 +1,13 @@
 import {ITriangleData} from "./interfaces/ITriangleData";
 import {ITriangleSides} from "./interfaces/ITriangleSides";
 import {Shape} from "./Shape";
-import {Rectangle} from "./Rectangle";
-import {Circle} from "./Circle";
 import {IShape} from "./interfaces/IShape";
 import {ISideCoords} from "./interfaces/ISideCoords";
+import {EShapeType} from "./interfaces/EShapeType";
 
 export class Triangle extends Shape {
     private triangleData: ITriangleData;
-    private readonly _type = "TRIANGLE";
+    private readonly _type = EShapeType.TRIANGLE;
     private _isSelected = false;
 
     constructor(data: string) {
@@ -40,8 +39,8 @@ export class Triangle extends Shape {
         context.closePath();
         context.fill();
         if (this.isSelected) {
-            const {a, b} = this.getSides();
-            context.strokeRect(px1 - 10, py1 - 10, a + 20, b + 20);
+            const {a, b, c} = this.getSides();
+            context.strokeRect(px1 - 10, py1 - 10, b + 20, a + 20);
         }
     }
 
@@ -57,7 +56,7 @@ export class Triangle extends Shape {
         this._isSelected = value;
     }
 
-    selected(x: number, y: number): IShape | null {
+    onShape(x: number, y: number): IShape | null {
         const {px1, px2, px3, py1, py2, py3} = this.triangleData;
         let a = (px1 - x) * (py2 - py1) - (px2 - px1) * (py1 - y);
         let b = (px2 - x) * (py3 - py2) - (px3 - px2) * (py2 - y);
@@ -70,13 +69,13 @@ export class Triangle extends Shape {
     }
 
     getPosition(): ISideCoords {
-        const {px1, py1} = this.triangleData;
-        const {a, b} = this.getSides();
+        const {px1, px2, px3, py1, py2, py3} = this.triangleData;
+        const {a, b, c} = this.getSides();
         return {
             x1: px1 - 10,
             y1: py1 - 10,
-            x2: a * 2 - 10,
-            y2: b * 2 - 10
+            x2: px1 + b + 10,
+            y2: py1 + a + 10
         }
     }
 
@@ -112,9 +111,11 @@ export class Triangle extends Shape {
 
     private getSides(): ITriangleSides {
         const {px1, px2, px3, py1, py2, py3} = this.triangleData;
-        const a = Math.sqrt((Math.pow((px1 - px2), 2)) + (Math.pow((py1 - py2), 2)));
-        const b = Math.sqrt((Math.pow((px2 - px3), 2)) + (Math.pow((py2 - py3), 2)));
-        const c = Math.sqrt((Math.pow((px1 - px3), 2)) + (Math.pow((py1 - py3), 2)));
+        const a = Math.sqrt(Math.pow(px1 - px2, 2) + Math.pow(py1 - py2, 2));
+        const b = Math.sqrt(Math.pow(px2 - px3, 2) + Math.pow(py2 - py3, 2));
+        const c = Math.sqrt(Math.pow(px1 - px3, 2) + Math.pow(py1 - py3, 2));
+
+        console.log(a, b, c);
 
         return {a, b, c};
     }

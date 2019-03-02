@@ -2,11 +2,12 @@ import {ICircleData} from "./interfaces/ICircleData";
 import {Shape} from "./Shape";
 import {IShape} from "./interfaces/IShape";
 import {ISideCoords} from "./interfaces/ISideCoords";
+import {EShapeType} from "./interfaces/EShapeType";
 
 export class Circle extends Shape {
     private readonly circleData: ICircleData;
     private readonly pi: number = 3.14;
-    private readonly _type = "CIRCLE";
+    private readonly _type = EShapeType.CIRCLE;
     private _isSelected = false;
 
     constructor(data: string) {
@@ -49,7 +50,7 @@ export class Circle extends Shape {
         return this._type;
     }
 
-    selected(x: number, y: number): IShape | null {
+    onShape(x: number, y: number): IShape | null {
         const {pcx, pcy, radius} = this.circleData;
         if (Math.sqrt((x-pcx)*(x-pcx)+(y-pcy)*(y-pcy)) <= radius) {
             return this;
