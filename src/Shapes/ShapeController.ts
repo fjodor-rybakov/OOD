@@ -9,6 +9,7 @@ export class ShapeController {
     private defaultData = [
         "TRIANGLE: P1=100,100; P2=100,220; P3=220, 220",
         "RECTANGLE: P1=440,440; P2=560,320",
+        "RECTANGLE: P1=440,440; P2=560,320",
         "CIRCLE: C=300,270; R=50"
     ];
 

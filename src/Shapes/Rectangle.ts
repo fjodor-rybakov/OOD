@@ -16,7 +16,6 @@ export class Rectangle extends Shape {
     }
 
     getArea(): number {
-        console.log(this.getSides())
         const sides: IRectangleSides = this.getSides();
         return sides.a * sides.b;
     }

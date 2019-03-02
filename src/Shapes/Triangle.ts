@@ -69,7 +69,7 @@ export class Triangle extends Shape {
     }
 
     getPosition(): ISideCoords {
-        const {px1, px2, px3, py1, py2, py3} = this.triangleData;
+        const {px1, py1} = this.triangleData;
         const {a, b, c} = this.getSides();
         return {
             x1: px1 - 10,
@@ -114,8 +114,6 @@ export class Triangle extends Shape {
         const a = Math.sqrt(Math.pow(px1 - px2, 2) + Math.pow(py1 - py2, 2));
         const b = Math.sqrt(Math.pow(px2 - px3, 2) + Math.pow(py2 - py3, 2));
         const c = Math.sqrt(Math.pow(px1 - px3, 2) + Math.pow(py1 - py3, 2));
-
-        console.log(a, b, c);
 
         return {a, b, c};
     }

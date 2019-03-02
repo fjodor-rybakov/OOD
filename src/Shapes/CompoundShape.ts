@@ -38,7 +38,7 @@ export class CompoundShape extends Shape {
         if (this.isSelected) {
             const posX = Math.max(this.compoundData.px1, this.compoundData.px2) - this.getSides().a;
             const posY = Math.max(this.compoundData.py1, this.compoundData.py2) - this.getSides().b;
-            context.strokeRect(posX - 10, posY - 10, this.getSides().a + 20, this.getSides().b + 20);
+            context.strokeRect(posX, posY, this.getSides().a, this.getSides().b);
         }
     }
 

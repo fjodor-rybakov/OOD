@@ -76,10 +76,8 @@ class App extends Component {
             }
         };
         addEventListener("keydown", (event: KeyboardEvent) => {
-            this.groupShape(event, canvas, compound);
-        });
-        addEventListener("keydown", (event: KeyboardEvent) => {
-            this.ungroupShape(event, canvas, compound, selectedShapes);
+            this.groupShape(event, canvas, compound, selectedShapes);
+            this.ungroupShape(event, canvas, compound);
         });
 
         compound.getChildren().map((item: IShape) => {
@@ -93,18 +91,18 @@ class App extends Component {
         compound.draw(canvas);
     }
 
-    private groupShape(event: KeyboardEvent, canvas: HTMLCanvasElement, compound: CompoundShape): void {
+    private ungroupShape(event: KeyboardEvent, canvas: HTMLCanvasElement, compound: CompoundShape): void {
         if (event.key === "u") {
-            compound.getChildren().map((item) => {
-                if (item.getType() === EShapeType.COMPOUND && item.isSelected) {
+            compound.getChildren().map((spape) => {
+                if (spape.getType() === EShapeType.COMPOUND && spape.isSelected) {
                     canvas.getContext("2d")!.clearRect(0, 0, canvas.width, canvas.height);
-                    const comp = item as CompoundShape;
-                    item.isSelected = false;
-                    comp.getChildren().map((item) => {
-                        compound.addChild(item);
+                    const currentCompound = spape as CompoundShape;
+                    spape.isSelected = false;
+                    currentCompound.getChildren().map((currentCompShape) => {
+                        currentCompShape.isSelected = true;
+                        compound.addChild(currentCompShape);
                     });
-
-                    _.remove(compound.getChildren(), comp);
+                    _.remove(compound.getChildren(), currentCompound);
                     compound.draw(canvas);
 
                     event.preventDefault();
@@ -114,17 +112,21 @@ class App extends Component {
         }
     }
 
-    private ungroupShape(event: KeyboardEvent, canvas: HTMLCanvasElement, compound: CompoundShape, selectedShapes: IShape[]): void {
+    private groupShape(event: KeyboardEvent, canvas: HTMLCanvasElement, compound: CompoundShape, selectedShapes: IShape[]): void {
         if (event.key === "g" && selectedShapes.length !== 0) {
             canvas.getContext("2d")!.clearRect(0, 0, canvas.width, canvas.height);
-            const newShapes = compound.getChildren().filter((item: IShape) => {
-                return !_.includes(selectedShapes, item);
+            const newShapes = _.remove(compound.getChildren(), item => {
+                item.isSelected = false;
+                return !_.includes(selectedShapes, item)
             });
+
             const newCompound = new CompoundShape(selectedShapes);
             newShapes.push(newCompound);
+
             compound.setChildren(newShapes);
             newCompound.isSelected = true;
             compound.draw(canvas);
+
             event.preventDefault();
             event.stopPropagation();
         }
