@@ -4,6 +4,7 @@ import {Shape} from "./Shape";
 import {Circle} from "./Circle";
 import {Triangle} from "./Triangle";
 import {IShape} from "./interfaces/IShape";
+import {ISideCoords} from "./interfaces/ISideCoords";
 
 export class Rectangle extends Shape {
     private rectangleData: IRectangleData;
@@ -59,17 +60,26 @@ export class Rectangle extends Shape {
         }
     }
 
-    setNewPosition(x: number, y: number): void {
+    setNewPosition(x: number, y: number, sx: number, sy: number): void {
         const {px1, px2, py1, py2} = this.rectangleData;
-        const cx = px1 + (px2 - px1) / 2;
-        const cy = py2 + (py1 - py2) / 2;
-        const ccx = cx - x;
-        const ccy = cy - y;
+        const ccx = x - sx;
+        const ccy = y - sy;
         this.rectangleData = {
-            px1: px1 - ccx,
-            px2: px2 - ccx,
-            py1: py1 - ccy,
-            py2: py2 - ccy
+            px1: px1 + ccx,
+            px2: px2 + ccx,
+            py1: py1 + ccy,
+            py2: py2 + ccy
+        };
+    }
+
+    getPosition(): ISideCoords {
+        const posX = Math.max(this.rectangleData.px1, this.rectangleData.px2) - this.getSides().a;
+        const posY = Math.max(this.rectangleData.py1, this.rectangleData.py2) - this.getSides().b;
+        return {
+            x1: posX - 10,
+            y1: posY - 10,
+            x2: posX + this.getSides().a + 10,
+            y2: posY + this.getSides().b + 10
         }
     }
 

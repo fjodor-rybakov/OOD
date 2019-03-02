@@ -1,3 +1,5 @@
+import {ISideCoords} from "./ISideCoords";
+
 export interface IShape {
     draw(canvas: HTMLCanvasElement): void;
 
@@ -9,7 +11,9 @@ export interface IShape {
 
     selected(x: number, y: number): IShape | null;
 
-    setNewPosition(x: number, y: number): void;
+    setNewPosition(x: number, y: number, sx: number, sy: number): void;
 
     isSelected: boolean;
+
+    getPosition(): ISideCoords;
 }

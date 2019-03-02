@@ -1,8 +1,7 @@
 import {ICircleData} from "./interfaces/ICircleData";
 import {Shape} from "./Shape";
-import {Triangle} from "./Triangle";
-import {Rectangle} from "./Rectangle";
 import {IShape} from "./interfaces/IShape";
+import {ISideCoords} from "./interfaces/ISideCoords";
 
 export class Circle extends Shape {
     private readonly circleData: ICircleData;
@@ -59,9 +58,21 @@ export class Circle extends Shape {
         }
     }
 
-    setNewPosition(pcx: number, pcy: number): void {
-        this.circleData.pcx = pcx;
-        this.circleData.pcy = pcy;
+    setNewPosition(pcx: number, pcy: number, sx: number, sy: number): void {
+        const ccx = pcx - sx;
+        const ccy = pcy - sy;
+        this.circleData.pcx += ccx;
+        this.circleData.pcy += ccy;
+    }
+
+    getPosition(): ISideCoords {
+        const {pcx, pcy, radius} = this.circleData;
+        return {
+            x1: pcx - radius - 10,
+            y1: pcy - radius - 10,
+            x2: pcx + radius + 10,
+            y2: pcy + radius + 10
+        };
     }
 
     private parseData(data: string): ICircleData {

@@ -4,6 +4,7 @@ import {Shape} from "./Shape";
 import {Rectangle} from "./Rectangle";
 import {Circle} from "./Circle";
 import {IShape} from "./interfaces/IShape";
+import {ISideCoords} from "./interfaces/ISideCoords";
 
 export class Triangle extends Shape {
     private triangleData: ITriangleData;
@@ -68,19 +69,28 @@ export class Triangle extends Shape {
         }
     }
 
-    setNewPosition(x: number, y: number): void {
+    getPosition(): ISideCoords {
+        const {px1, py1} = this.triangleData;
+        const {a, b} = this.getSides();
+        return {
+            x1: px1 - 10,
+            y1: py1 - 10,
+            x2: a * 2 - 10,
+            y2: b * 2 - 10
+        }
+    }
+
+    setNewPosition(x: number, y: number, sx: number, sy: number): void {
         const {px1, px2, px3, py1, py2, py3} = this.triangleData;
-        const cx = (px1 + px2 + px3) / 3;
-        const cy = (py1 + py2 + py3) / 3;
-        const ccx = cx - x;
-        const ccy = cy - y;
+        const ccx = x - sx;
+        const ccy = y - sy;
         this.triangleData = {
-            px1: px1 - ccx,
-            px2: px2 - ccx,
-            px3: px3 - ccx,
-            py1: py1 - ccy,
-            py2: py2 - ccy,
-            py3: py3 - ccy
+            px1: px1 + ccx,
+            px2: px2 + ccx,
+            px3: px3 + ccx,
+            py1: py1 + ccy,
+            py2: py2 + ccy,
+            py3: py3 + ccy
         }
     }
 

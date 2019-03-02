@@ -1,4 +1,5 @@
 import {IShape} from "./interfaces/IShape";
+import {ISideCoords} from "./interfaces/ISideCoords";
 
 export abstract class Shape implements IShape {
     abstract getArea(): number;
@@ -11,9 +12,11 @@ export abstract class Shape implements IShape {
 
     abstract selected(x: number, y: number): IShape | null;
 
-    abstract setNewPosition(x: number, y: number): void;
+    abstract setNewPosition(x: number, y: number, sx: number, sy: number): void;
 
     abstract get isSelected(): boolean;
 
     abstract set isSelected(value: boolean);
+
+    abstract getPosition(): ISideCoords;
 }
