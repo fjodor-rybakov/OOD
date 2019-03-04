@@ -86,7 +86,7 @@ export class ShapeController {
         const selectedShapes = compound.getChildren().filter(item => item.isSelected);
         if (event.key === "g" && selectedShapes.length !== 0 && selectedShapes.length >= 2) {
             canvas.getContext("2d")!.clearRect(0, 0, canvas.width, canvas.height);
-            const newShapes = _.remove(compound.getChildren(), item => {
+            const newShapes: IShape[] = _.remove(compound.getChildren(), item => {
                 item.isSelected = false;
                 return !_.includes(selectedShapes, item)
             });

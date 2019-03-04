@@ -1,8 +1,7 @@
 import React, {Component, RefObject} from 'react';
 import {autobind} from "core-decorators";
-import {IShape} from "./Shapes/interfaces/IShape";
-import {ShapeController} from "./Shapes/ShapeController";
-import {CompoundShape} from "./Shapes/CompoundShape";
+import {ShapeController} from "./ShapeRedactor/Shapes/ShapeController";
+import {ShapeRedactor} from "./ShapeRedactor/ShapeRedactor";
 import './App.css';
 
 @autobind
@@ -21,23 +20,8 @@ class App extends Component {
             return;
         }
 
-        canvas.oncontextmenu = (e) => e.preventDefault();
-
-        const shapes: IShape[] = data.map((line: string) => this.shapeController.getShape(line));
-        const compound = new CompoundShape(shapes);
-        compound.draw(canvas);
-        console.log(`${compound.getType()}: P=${compound.getPerimeter()}; S=${compound.getArea()}`);
-
-        canvas.onmousedown = this.shapeController.onDrag.bind(this, canvas, compound);
-
-        addEventListener("keydown", (event: KeyboardEvent) => {
-            this.shapeController.groupShape(canvas, compound, event);
-            this.shapeController.ungroupShape(canvas, compound, event);
-        });
-
-        compound.getChildren().map((item: IShape) => {
-            console.log(`${item.getType()}: P=${item.getPerimeter()}; S=${item.getArea()}`);
-        });
+        const instance: ShapeRedactor = ShapeRedactor.getInstance(canvas, data);
+        instance.run();
     }
 
     render() {
