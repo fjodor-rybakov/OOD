@@ -16,11 +16,11 @@ export class ShapeController {
         "CIRCLE: C=300,270; R=50"
     ];
 
-    getDefaultData(): string[] {
+    public getDefaultData(): string[] {
         return this.defaultData;
     }
 
-    getShape(line: string, canvas: HTMLCanvasElement): IShape {
+    public getShape(line: string, canvas: HTMLCanvasElement): IShape {
         const partOfData: string[] = line.split(":");
         let type: string = partOfData[0];
 
@@ -43,7 +43,7 @@ export class ShapeController {
         }
     }
 
-    groupShape(canvas: HTMLCanvasElement, compound: Compound, event: KeyboardEvent): void {
+    public groupShape(canvas: HTMLCanvasElement, compound: Compound, event: KeyboardEvent): void {
         const selectedShapes = compound.getChildren().filter(item => item.isSelected);
         if (event.key === "g" && selectedShapes.length !== 0 && selectedShapes.length >= 2) {
             canvas.getContext("2d")!.clearRect(0, 0, canvas.width, canvas.height);
@@ -64,7 +64,7 @@ export class ShapeController {
         }
     }
 
-    ungroupShape(canvas: HTMLCanvasElement, compound: Compound, event: KeyboardEvent): void {
+    public ungroupShape(canvas: HTMLCanvasElement, compound: Compound, event: KeyboardEvent): void {
         if (event.key === "u") {
             compound.getChildren().map((shape) => {
                 if (shape.getType() === EShapeType.COMPOUND && shape.isSelected) {

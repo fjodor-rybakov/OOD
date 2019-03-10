@@ -5,6 +5,8 @@ import {autobind} from "core-decorators";
 import {State} from "./State/State";
 import {DragState} from "./State/DragState";
 import {FillState} from "./State/FillState";
+import {BorderColorCommand} from "./Command/BorderColorCommand";
+import {BorderSizeCommand} from "./Command/BorderSizeCommand";
 
 @autobind
 export class ShapeRedactor {
@@ -71,34 +73,16 @@ export class ShapeRedactor {
         compound.getChildren().map((item: IShape) => {
             console.log(`${item.getType()}: P=${item.getPerimeter()}; S=${item.getArea()}`);
         });
-
-        console.log(ShapeRedactor.instance)
     }
 
     public setBorderSize(value: number): void {
-        if (!ShapeRedactor.canvas) {
-            return;
-        }
-        ShapeRedactor.compound.getChildren().map((item: IShape) => {
-            if (item.isSelected) {
-                item.borderSize = value;
-            }
-        });
-        ShapeRedactor.canvas.getContext("2d")!.clearRect(0, 0, ShapeRedactor.canvas.width, ShapeRedactor.canvas.height);
-        ShapeRedactor.compound.draw();
+        const borderSizeCommand = new BorderSizeCommand(value);
+        borderSizeCommand.execute();
     }
 
     public setBorderColor(color: string): void {
-        if (!ShapeRedactor.canvas) {
-            return;
-        }
-        ShapeRedactor.compound.getChildren().map((item: IShape) => {
-            if (item.isSelected) {
-                item.borderColor = color;
-            }
-        });
-        ShapeRedactor.canvas.getContext("2d")!.clearRect(0, 0, ShapeRedactor.canvas.width, ShapeRedactor.canvas.height);
-        ShapeRedactor.compound.draw();
+        const borderColorCommand = new BorderColorCommand(color);
+        borderColorCommand.execute();
     }
 
     public setFillColor(color: string): void {

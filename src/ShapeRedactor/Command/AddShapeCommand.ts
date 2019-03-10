@@ -8,11 +8,11 @@ export class AddShapeCommand implements ICommand {
     private controller = new ShapeController();
     private readonly data: string;
 
-    constructor(data: string) {
+    public constructor(data: string) {
         this.data = data;
     }
 
-    execute(): void {
+    public execute(): void {
         const instance: ShapeRedactor = ShapeRedactor.getInstance();
         const canvas = instance.getCanvas();
         if (!canvas) {

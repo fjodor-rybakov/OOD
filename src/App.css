@@ -43,3 +43,8 @@
     width: 350px;
     height: 200px;
 }
+
+.panel {
+    display: inline-block;
+    vertical-align: top;
+}

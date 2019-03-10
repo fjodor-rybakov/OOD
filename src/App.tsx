@@ -52,10 +52,6 @@ class App extends Component {
     private setBorderSize(event: ChangeEvent): void {
         const data = event.target as HTMLInputElement;
         const value = +data.value;
-        if (isNaN(value)) {
-            console.log("Некорректные данные");
-            return;
-        }
         const instance: ShapeRedactor = ShapeRedactor.getInstance();
         instance.setBorderSize(value);
     }
@@ -90,16 +86,18 @@ class App extends Component {
                 </div>
                 {
                     this.store.isShow &&
-                    <div>
+                    <div className={"panel"}>
                         <div className={"add_shape"}>
                             <h3>Add new shape</h3>
                             <button onClick={this.addShape}>Add shape</button>
                             <input value={this.store.newDataShape} onChange={this.setNewDataShape}/>
                         </div>
                         <div className={"change_color"}>
+                            <h3>Fill color style</h3>
                             <SketchPicker color={this.store.fillColor} onChange={this.setFillColor}/>
                         </div>
                         <div className={"change_border_color"}>
+                            <h3>Border color style</h3>
                             <SketchPicker color={this.store.borderColor} onChange={this.setBorderColor}/>
                         </div>
                         <div className={"change_border"}>
@@ -107,6 +105,7 @@ class App extends Component {
                             <input onChange={this.setBorderSize}/>
                         </div>
                         <div>
+                            <h3>Change state</h3>
                             <button onClick={this.setDragState}>drag and drop</button>
                             <button onClick={this.setFillState}>fill</button>
                         </div>
