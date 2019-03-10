@@ -1,18 +1,23 @@
-import {ICircleData} from "./interfaces/ICircleData";
-import {Shape} from "./Shape";
-import {IShape} from "./interfaces/IShape";
-import {ISideCoords} from "./interfaces/ISideCoords";
-import {EShapeType} from "./interfaces/EShapeType";
+import {ICircleData} from "./ICircleData";
+import {Shape} from "../Shape";
+import {IShape} from "../interfaces/IShape";
+import {ISideCoords} from "../interfaces/ISideCoords";
+import {EShapeType} from "../interfaces/EShapeType";
 
 export class Circle extends Shape {
     private readonly circleData: ICircleData;
     private readonly pi: number = 3.14;
     private readonly _type = EShapeType.CIRCLE;
     private _isSelected = false;
+    private _fillColor = "#fff";
+    private _borderSize = 1;
+    private _borderColor = "black";
+    private readonly context: CanvasRenderingContext2D | null;
 
-    constructor(data: string) {
+    constructor(data: string, canvas: HTMLCanvasElement) {
         super();
         this.circleData = this.parseData(data);
+        this.context = canvas.getContext("2d");
     }
 
     getArea(): number {
@@ -23,19 +28,51 @@ export class Circle extends Shape {
         return this.circleData.radius * 2 * this.pi;
     }
 
-    draw(canvas: HTMLCanvasElement): void {
-        let context: CanvasRenderingContext2D | null = canvas.getContext("2d");
-        if (!context) return;
+    draw(): void {
+        if (!this.context) return;
 
-        context.fillStyle = "orange";
-        context.beginPath();
-        context.arc(this.circleData.pcx, this.circleData.pcy, this.circleData.radius, 0, 2 * this.pi);
-        context.fill();
-        context.closePath();
+        this.context.beginPath();
+        this.context.fillStyle = this.fillColor;
+        this.context.arc(this.circleData.pcx, this.circleData.pcy, this.circleData.radius, 0, 2 * this.pi);
+        this.context.closePath();
+        this.context.fill();
         if (this.isSelected) {
             const {pcx, pcy, radius} = this.circleData;
-            context.strokeRect(pcx - radius - 10, pcy - radius - 10, radius * 2 + 20, radius * 2 + 20);
+            this.context.lineWidth = 2;
+            this.context.strokeStyle = "#565f67";
+            this.context.strokeRect(pcx - radius - 10, pcy - radius - 10, radius * 2 + 20, radius * 2 + 20);
         }
+        this.context.strokeStyle = this.borderColor;
+        this.context.lineWidth = this.borderSize;
+        this.context.stroke();
+    }
+
+    getType() {
+        return this._type;
+    }
+
+    get borderColor(): string {
+        return this._borderColor;
+    }
+
+    set borderColor(value: string) {
+        this._borderColor = value;
+    }
+
+    get borderSize(): number {
+        return this._borderSize;
+    }
+
+    set borderSize(value: number) {
+        this._borderSize = value;
+    }
+
+    get fillColor(): string {
+        return this._fillColor;
+    }
+
+    set fillColor(value: string) {
+        this._fillColor = value;
     }
 
     get isSelected(): boolean {
@@ -44,10 +81,6 @@ export class Circle extends Shape {
 
     set isSelected(value: boolean) {
         this._isSelected = value;
-    }
-
-    getType() {
-        return this._type;
     }
 
     onShape(x: number, y: number): IShape | null {

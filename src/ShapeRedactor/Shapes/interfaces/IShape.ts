@@ -1,7 +1,7 @@
 import {ISideCoords} from "./ISideCoords";
 
 export interface IShape {
-    draw(canvas: HTMLCanvasElement): void;
+    draw(color?: string): void;
 
     getArea(): number;
 
@@ -13,7 +13,13 @@ export interface IShape {
 
     setNewPosition(x: number, y: number, sx: number, sy: number): void;
 
+    getPosition(): ISideCoords;
+
     isSelected: boolean;
 
-    getPosition(): ISideCoords;
+    fillColor: string;
+
+    borderColor: string;
+
+    borderSize: number;
 }

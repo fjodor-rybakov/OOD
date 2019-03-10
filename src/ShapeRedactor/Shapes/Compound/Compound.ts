@@ -1,20 +1,25 @@
-import {Shape} from "./Shape";
-import {IShape} from "./interfaces/IShape";
-import {ISideCoords} from "./interfaces/ISideCoords";
-import {IRectangleData} from "./interfaces/IRectangleData";
-import {IRectangleSides} from "./interfaces/IRectangleSides";
-import {EShapeType} from "./interfaces/EShapeType";
+import {Shape} from "../Shape";
+import {IShape} from "../interfaces/IShape";
+import {ISideCoords} from "../interfaces/ISideCoords";
+import {IRectangleData} from "../Rectangle/IRectangleData";
+import {IRectangleSides} from "../Rectangle/IRectangleSides";
+import {EShapeType} from "../interfaces/EShapeType";
 
-export class CompoundShape extends Shape {
+export class Compound extends Shape {
     private compoundData: IRectangleData;
     private children: Shape[] = [];
     private readonly _type = EShapeType.COMPOUND;
     private _isSelected = false;
+    private _fillColor = "";
+    private _borderSize = 0;
+    private _borderColor = "";
+    private readonly context: CanvasRenderingContext2D | null;
 
-    constructor(shapes: Shape[]) {
+    constructor(shapes: Shape[], canvas: HTMLCanvasElement) {
         super();
         this.compoundData = this.setCompoundData(shapes);
         this.children.push(...shapes);
+        this.context = canvas.getContext("2d");
     }
 
     getChildren(): Shape[] {
@@ -29,16 +34,17 @@ export class CompoundShape extends Shape {
         this.children = shapes;
     }
 
-    draw(canvas: HTMLCanvasElement) {
-        let context: CanvasRenderingContext2D | null = canvas.getContext("2d");
-        if (!context) return;
+    draw() {
+        if (!this.context) return;
         this.children.map((item: IShape) => {
-            item.draw(canvas);
+            item.draw();
         });
         if (this.isSelected) {
             const posX = Math.max(this.compoundData.px1, this.compoundData.px2) - this.getSides().a;
             const posY = Math.max(this.compoundData.py1, this.compoundData.py2) - this.getSides().b;
-            context.strokeRect(posX, posY, this.getSides().a, this.getSides().b);
+            this.context.lineWidth = 2;
+            this.context.strokeStyle = "#565f67";
+            this.context.strokeRect(posX, posY, this.getSides().a, this.getSides().b);
         }
     }
 
@@ -56,10 +62,6 @@ export class CompoundShape extends Shape {
             sum += item.getPerimeter();
         });
         return sum;
-    }
-
-    getType(): string {
-        return this._type;
     }
 
     onShape(x: number, y: number): IShape | null {
@@ -96,6 +98,34 @@ export class CompoundShape extends Shape {
             x2: posX + this.getSides().a + 10,
             y2: posY + this.getSides().b + 10
         }
+    }
+
+    getType(): string {
+        return this._type;
+    }
+
+    get borderColor(): string {
+        return this._borderColor;
+    }
+
+    set borderColor(value: string) {
+        this._borderColor = value;
+    }
+
+    get borderSize(): number {
+        return this._borderSize;
+    }
+
+    set borderSize(value: number) {
+        this._borderSize = value;
+    }
+
+    get fillColor(): string {
+        return this._fillColor;
+    }
+
+    set fillColor(value: string) {
+        this._fillColor = value;
     }
 
     get isSelected(): boolean {

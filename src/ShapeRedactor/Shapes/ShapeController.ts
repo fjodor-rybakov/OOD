@@ -1,8 +1,8 @@
 import {IShape} from "./interfaces/IShape";
-import {Triangle} from "./Triangle";
-import {Rectangle} from "./Rectangle";
-import {Circle} from "./Circle";
-import {CompoundShape} from "./CompoundShape";
+import {Triangle} from "./Triangle/Triangle";
+import {Rectangle} from "./Rectangle/Rectangle";
+import {Circle} from "./Circle/Circle";
+import {Compound} from "./Compound/Compound";
 import {EShapeType} from "./interfaces/EShapeType";
 import * as _ from "lodash";
 import {autobind} from "core-decorators";
@@ -20,69 +20,30 @@ export class ShapeController {
         return this.defaultData;
     }
 
-    getShape(line: string): IShape {
+    getShape(line: string, canvas: HTMLCanvasElement): IShape {
         const partOfData: string[] = line.split(":");
         let type: string = partOfData[0];
 
         switch (type) {
             case EShapeType.TRIANGLE: {
-                return new Triangle(partOfData[1]);
+                return new Triangle(partOfData[1], canvas);
             }
 
             case EShapeType.RECTANGLE: {
-                return new Rectangle(partOfData[1]);
+                return new Rectangle(partOfData[1], canvas);
             }
 
             case EShapeType.CIRCLE: {
-                return new Circle(partOfData[1]);
+                return new Circle(partOfData[1], canvas);
             }
 
             default: {
-                return new CompoundShape([]);
+                return new Compound([], canvas);
             }
         }
     }
 
-    selectShape(canvas: HTMLCanvasElement, item: IShape, compound: IShape) {
-        item.isSelected = !item.isSelected;
-        canvas.getContext("2d")!.clearRect(0, 0, canvas.width, canvas.height);
-        compound.draw(canvas);
-    }
-
-    onDrag(canvas: HTMLCanvasElement, compound: CompoundShape, event: MouseEvent) {
-        const elemLeft = canvas.offsetLeft, elemTop = canvas.offsetTop;
-        let isDrag = false;
-        let xd = 0, yd = 0, typeDown = 0, ox = 0, oy = 0;
-        xd = ox = event.pageX - elemLeft;
-        yd = oy = event.pageY - elemTop;
-        typeDown = event.button;
-
-        compound.getChildren().map((item: IShape) => {
-            if (item.onShape(xd, yd)) {
-                isDrag = true;
-
-                if (typeDown === 2) {
-                    this.selectShape(canvas, item, compound);
-                }
-                canvas.onmousemove = (event: MouseEvent) => {
-                    if (isDrag) {
-                        let x = event.pageX - elemLeft, y = event.pageY - elemTop;
-                        item.setNewPosition(x, y, ox, oy);
-                        ox = x;
-                        oy = y;
-                        canvas.getContext("2d")!.clearRect(0, 0, canvas.width, canvas.height);
-                        compound.draw(canvas);
-                    }
-                };
-
-                canvas.onmouseup = () => {
-                    isDrag = false;
-                };
-            }
-        });
-    }
-
-    groupShape(canvas: HTMLCanvasElement, compound: CompoundShape, event: KeyboardEvent): void {
+    groupShape(canvas: HTMLCanvasElement, compound: Compound, event: KeyboardEvent): void {
         const selectedShapes = compound.getChildren().filter(item => item.isSelected);
         if (event.key === "g" && selectedShapes.length !== 0 && selectedShapes.length >= 2) {
             canvas.getContext("2d")!.clearRect(0, 0, canvas.width, canvas.height);
@@ -91,31 +52,31 @@ export class ShapeController {
                 return !_.includes(selectedShapes, item)
             });
 
-            const newCompound = new CompoundShape(selectedShapes);
+            const newCompound = new Compound(selectedShapes, canvas);
             newShapes.push(newCompound);
 
             compound.setChildren(newShapes);
             newCompound.isSelected = true;
-            compound.draw(canvas);
+            compound.draw();
 
             event.preventDefault();
             event.stopPropagation();
         }
     }
 
-    ungroupShape(canvas: HTMLCanvasElement, compound: CompoundShape, event: KeyboardEvent): void {
+    ungroupShape(canvas: HTMLCanvasElement, compound: Compound, event: KeyboardEvent): void {
         if (event.key === "u") {
             compound.getChildren().map((shape) => {
                 if (shape.getType() === EShapeType.COMPOUND && shape.isSelected) {
                     canvas.getContext("2d")!.clearRect(0, 0, canvas.width, canvas.height);
-                    const currentCompound = shape as CompoundShape;
+                    const currentCompound = shape as Compound;
                     shape.isSelected = false;
                     currentCompound.getChildren().map((currentCompShape) => {
                         currentCompShape.isSelected = true;
                         compound.addChild(currentCompShape);
                     });
                     _.remove(compound.getChildren(), currentCompound);
-                    compound.draw(canvas);
+                    compound.draw();
 
                     event.preventDefault();
                     event.stopPropagation();

@@ -1,18 +1,23 @@
-import {ITriangleData} from "./interfaces/ITriangleData";
-import {ITriangleSides} from "./interfaces/ITriangleSides";
-import {Shape} from "./Shape";
-import {IShape} from "./interfaces/IShape";
-import {ISideCoords} from "./interfaces/ISideCoords";
-import {EShapeType} from "./interfaces/EShapeType";
+import {ITriangleData} from "./ITriangleData";
+import {ITriangleSides} from "./ITriangleSides";
+import {Shape} from "../Shape";
+import {IShape} from "../interfaces/IShape";
+import {ISideCoords} from "../interfaces/ISideCoords";
+import {EShapeType} from "../interfaces/EShapeType";
 
 export class Triangle extends Shape {
     private triangleData: ITriangleData;
     private readonly _type = EShapeType.TRIANGLE;
     private _isSelected = false;
+    private _fillColor = "#fff";
+    private _borderSize = 1;
+    private _borderColor = "black";
+    private readonly context: CanvasRenderingContext2D | null;
 
-    constructor(data: string) {
+    constructor(data: string, canvas: HTMLCanvasElement) {
         super();
         this.triangleData = this.parseData(data);
+        this.context = canvas.getContext("2d");
     }
 
     getArea(): number {
@@ -26,26 +31,54 @@ export class Triangle extends Shape {
         return sides.a + sides.b + sides.c;
     }
 
-    draw(canvas: HTMLCanvasElement): void {
-        let context: CanvasRenderingContext2D | null = canvas.getContext("2d");
-        if (!context) return;
+    draw(): void {
+        if (!this.context) return;
         const {px1, px2, px3, py1, py2, py3} = this.triangleData;
 
-        context.beginPath();
-        context.fillStyle = "red";
-        context.moveTo(px1, py1);
-        context.lineTo(px2, py2);
-        context.lineTo(px3, py3);
-        context.closePath();
-        context.fill();
+        this.context.beginPath();
+        this.context.fillStyle = this.fillColor;
+        this.context.moveTo(px1, py1);
+        this.context.lineTo(px2, py2);
+        this.context.lineTo(px3, py3);
+        this.context.closePath();
+        this.context.fill();
         if (this.isSelected) {
-            const {a, b, c} = this.getSides();
-            context.strokeRect(px1 - 10, py1 - 10, b + 20, a + 20);
+            const {a, b} = this.getSides();
+            this.context.lineWidth = 2;
+            this.context.strokeStyle = "#565f67";
+            this.context.strokeRect(px1 - 10, py1 - 10, b + 20, a + 20);
         }
+        this.context.strokeStyle = this.borderColor;
+        this.context.lineWidth = this.borderSize;
+        this.context.stroke();
     }
 
     getType() {
         return this._type;
+    }
+
+    get borderColor(): string {
+        return this._borderColor;
+    }
+
+    set borderColor(value: string) {
+        this._borderColor = value;
+    }
+
+    get borderSize(): number {
+        return this._borderSize;
+    }
+
+    set borderSize(value: number) {
+        this._borderSize = value;
+    }
+
+    get fillColor(): string {
+        return this._fillColor;
+    }
+
+    set fillColor(value: string) {
+        this._fillColor = value;
     }
 
     get isSelected(): boolean {

@@ -1,18 +1,23 @@
-import {IRectangleData} from "./interfaces/IRectangleData";
-import {IRectangleSides} from "./interfaces/IRectangleSides";
-import {Shape} from "./Shape";
-import {IShape} from "./interfaces/IShape";
-import {ISideCoords} from "./interfaces/ISideCoords";
-import {EShapeType} from "./interfaces/EShapeType";
+import {IRectangleData} from "./IRectangleData";
+import {IRectangleSides} from "./IRectangleSides";
+import {Shape} from "../Shape";
+import {IShape} from "../interfaces/IShape";
+import {ISideCoords} from "../interfaces/ISideCoords";
+import {EShapeType} from "../interfaces/EShapeType";
 
 export class Rectangle extends Shape {
     private rectangleData: IRectangleData;
     private readonly _type = EShapeType.RECTANGLE;
     private _isSelected = false;
+    private _fillColor = "#fff";
+    private _borderSize = 1;
+    private _borderColor = "black";
+    private readonly context: CanvasRenderingContext2D | null;
 
-    constructor(data: string) {
+    constructor(data: string, canvas: HTMLCanvasElement) {
         super();
         this.rectangleData  = this.parseData(data);
+        this.context = canvas.getContext("2d");
     }
 
     getArea(): number {
@@ -25,21 +30,50 @@ export class Rectangle extends Shape {
         return (sides.a + sides.b) * 2;
     }
 
-    draw(canvas: HTMLCanvasElement): void {
-        let context: CanvasRenderingContext2D | null = canvas.getContext("2d");
-        if (!context) return;
+    draw(): void {
+        if (!this.context) return;
         const posX = Math.max(this.rectangleData.px1, this.rectangleData.px2) - this.getSides().a;
         const posY = Math.max(this.rectangleData.py1, this.rectangleData.py2) - this.getSides().b;
 
-        context.fillStyle = "green";
-        context.fillRect(posX, posY, this.getSides().a, this.getSides().b);
+        this.context.fillStyle = this.fillColor;
+        this.context.fillRect(posX, posY, this.getSides().a, this.getSides().b);
         if (this.isSelected) {
-            context.strokeRect(posX - 10, posY - 10, this.getSides().a + 20, this.getSides().b + 20);
+            this.context.lineWidth = 2;
+            this.context.strokeStyle = "#565f67";
+            this.context.strokeRect(posX - 10, posY - 10, this.getSides().a + 20, this.getSides().b + 20);
         }
+
+        this.context.strokeStyle = this.borderColor;
+        this.context.lineWidth = this.borderSize;
+        this.context.strokeRect(posX, posY, this.getSides().a, this.getSides().b);
     }
 
     getType() {
         return this._type;
+    }
+
+    get borderColor(): string {
+        return this._borderColor;
+    }
+
+    set borderColor(value: string) {
+        this._borderColor = value;
+    }
+
+    get borderSize(): number {
+        return this._borderSize;
+    }
+
+    set borderSize(value: number) {
+        this._borderSize = value;
+    }
+
+    get fillColor(): string {
+        return this._fillColor;
+    }
+
+    set fillColor(value: string) {
+        this._fillColor = value;
     }
 
     get isSelected(): boolean {
